@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 
 # Define the jobs we want to run for this project
 jobs:
@@ -12,20 +12,8 @@ jobs:
       - run: python --version           # For debugging
       - run: sudo apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
 
-  job2:
-    steps:
-      - run: sudo apt-get install -y python3-pip
-      - run: pip install virtualenv #start a virtual environment specifc to th project
-      - run: virtualenv venv
-      - run: source venv/bin/activate
-      - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
-
-
 # Defining circle-ci workflows and dependencies
 workflows:
-  version: 2.1
-  jobs:
-    - job1
-    - job2:
-        requires:
-          - job1
+  build:
+    jobs:
+      - build
