@@ -28,6 +28,9 @@ jobs:
 
 # Defining circle-ci workflows and dependencies
 workflows:
-  compile:
+  compile_and_test:
     jobs:
       - compile
+      - test:
+          requires:
+            - compile
