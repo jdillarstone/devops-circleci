@@ -17,20 +17,35 @@ jobs:
       - run: source venv/bin/activate
       - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
 
-  test:
+  deploy:
     docker:
       - image: jdillarstone/my_image
         auth:
           username: jdillarstone
           password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
     steps:
-      - run: pytest --junitxml=report.xml # uses pytest with the --junitxml=report.xml flag to format the output into the JUnit report XML format
+      - run: apt-get install -y ruby-dev
+      - run: echo 'export GEM_HOME=~/.ruby/' >> ~/.bashrc
+      - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
+      - run: source ~/.bashrc
+      - run: gem install dpl
+      - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
+
+
+#  test:
+ #   docker:
+  #    - image: jdillarstone/my_image
+   #     auth:
+    #      username: jdillarstone
+     #     password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
+    #steps:
+     # - run: pytest --junitxml=report.xml # uses pytest with the --junitxml=report.xml flag to format the output into the JUnit report XML format
 
 # Defining circle-ci workflows and dependencies
 workflows:
-  compile_and_test:
+  compile_and_deploy:
     jobs:
       - compile
-      - test:
+      - deploy:
           requires:
             - compile
