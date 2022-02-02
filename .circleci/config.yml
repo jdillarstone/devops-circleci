@@ -1,43 +1,45 @@
 version: 2.1
+ 
+# Look into "orbs" - looks like a way to streamline / keep config file light?
 
 # Define the jobs we want to run for this project
 jobs:
-  compile:
-    docker:
-      - image: jdillarstone/my_image
-        auth:
-          username: jdillarstone
-          password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project, probably want to hide this
-    steps:
-      - run: python --version      # For debugging
-      - run: apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
-      - run: apt-get install -y python3-pip
-      - run: pip install virtualenv #start a virtual environment specifc to th project
-      - run: virtualenv venv
-      - run: source venv/bin/activate
-    # - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
-
-  # test: still to be defined
-
-  deploy:
-    docker:
-      - image: jdillarstone/my_image
-        auth:
-          username: jdillarstone
-          password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
-    steps:
-      - run: apt-get install -y ruby-dev
-      - run: echo 'export GEM_HOME=~/.ruby/' >> ~/.bashrc
-      - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
-      - run: source ~/.bashrc
-      - run: gem install dpl
-      - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
-
+ compile:
+   docker:
+     - image: jdillarstone/my_image
+       auth:
+         username: $DOCKER_USERNAME
+         password: $DOCKER_API_KEY
+   steps:
+     - run: python --version      # For debugging
+     - run: apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
+     - run: apt-get install -y python3-pip
+     - run: pip install virtualenv #start a virtual environment specifc to th project
+     - run: virtualenv venv
+     - run: source venv/bin/activate
+   # - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
+ 
+ # test: still to be defined
+ 
+ deploy:
+   docker:
+     - image: jdillarstone/my_image
+       auth:
+         username: $DOCKER_USERNAME
+         password: $DOCKER_API_KEY
+   steps:
+     - run: apt-get install -y ruby-dev
+     - run: echo 'export GEM_HOME=~/.ruby/' >> ~/.bashrc
+     - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
+     - run: source ~/.bashrc
+     - run: gem install dpl
+     - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
+ 
 # Defining circle-ci workflows and dependencies
 workflows:
-  compile_and_deploy:
-    jobs:
-      - compile
-      - deploy:
-          requires:
-            - compile
+ compile_and_deploy:
+   jobs:
+     - compile
+     - deploy:
+         requires:
+           - compile
