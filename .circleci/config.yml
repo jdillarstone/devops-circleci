@@ -9,13 +9,22 @@ jobs:
           username: jdillarstone
           password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
     steps:
-      - run: python --version           # For debugging
+      - run: python --version      # For debugging
       - run: apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
       - run: apt-get install -y python3-pip
       - run: pip install virtualenv #start a virtual environment specifc to th project
       - run: virtualenv venv
       - run: source venv/bin/activate
-      - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
+      #- run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
+
+  test:
+    docker:
+      - image: jdillarstone/my_image
+        auth:
+          username: jdillarstone
+          password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
+    steps:
+      - run: pytest --junitxml=report.xml # uses pytest with the --junitxml=report.xml flag to format the output into the JUnit report XML format
 
 # Defining circle-ci workflows and dependencies
 workflows:
