@@ -11,13 +11,13 @@ jobs:
          username: $DOCKER_USERNAME
          password: $DOCKER_API_KEY
    steps:
-     - run: python --version      # For debugging
-     - run: apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
+     - run: python --version   
+     - run: apt-get update -qy
      - run: apt-get install -y python3-pip
-     - run: pip install virtualenv #start a virtual environment specifc to th project
+     - run: pip install virtualenv
      - run: virtualenv venv
      - run: source venv/bin/activate
-   # - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
+   # - run: pip install -r requirements.txt # not working for some reason - can't locate the file?
  
  # test: still to be defined
  
@@ -33,7 +33,7 @@ jobs:
      - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
      - run: source ~/.bashrc
      - run: gem install dpl
-     - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
+     - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35 # fails at this line, unclear why...
  
 # Defining circle-ci workflows and dependencies
 workflows:
