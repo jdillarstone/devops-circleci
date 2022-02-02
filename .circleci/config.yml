@@ -10,7 +10,7 @@ jobs:
           password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
     steps:
       - run: python --version           # For debugging
-      - run: sudo apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
+      - run: apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
 
 # Defining circle-ci workflows and dependencies
 workflows:
