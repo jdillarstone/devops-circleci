@@ -22,10 +22,10 @@ workflows:
   version: 2.1
   jobs:
     - job1
-    job2:
-      requires:
-        - job1
-    job3:
-      requires:
-        - job1
-        - job2
+    - job2:
+        requires:
+          - job1
+    - job3:
+        requires:
+          - job1
+          - job2
