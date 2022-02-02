@@ -4,18 +4,18 @@ version: 2.1
 
 jobs:
   job1:
-    - run: python --version           # For debugging
-    - run: sudo apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
+    steps:
+      - run: python --version           # For debugging
+      - run: sudo apt-get update -qy    # updates the package lists to get information on the newest versions of packages and their dependencies
 
   job2:
-    - run: sudo apt-get install -y python3-pip
-    - run: pip install virtualenv #start a virtual environment specifc to th project
-    - run: virtualenv venv
-    - run: source venv/bin/activate
-    - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
+    steps:
+      - run: sudo apt-get install -y python3-pip
+      - run: pip install virtualenv #start a virtual environment specifc to th project
+      - run: virtualenv venv
+      - run: source venv/bin/activate
+      - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
 
-
-  job3:
 
 # Defining circle-ci workflows and dependencies
 workflows:
@@ -25,7 +25,3 @@ workflows:
     - job2:
         requires:
           - job1
-    - job3:
-        requires:
-          - job1
-          - job2
