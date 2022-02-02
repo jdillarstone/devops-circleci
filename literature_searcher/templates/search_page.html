@@ -1,0 +1,13 @@
+{% extends "basic.html" %}
+{% block title%}Home{% endblock %}
+{% block body %}
+Search some literature:
+<form action="/search_result" method="post"> 
+  <label for="search_query">Query:</label>
+  <input type="text" id="search_query" name="search_query">
+<input type="radio" name="download_format" id="html" value="HTML">HTML</input>
+<input type="radio" name="download_format" id="markdown" value="Markdown">Markdown</input>
+<input type="radio" name="download_format" id="pdf" value="PDF">PDF</input>
+<input type="submit" value="Submit">
+</form>
+{% endblock %}
