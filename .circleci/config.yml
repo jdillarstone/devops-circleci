@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@0.0.10 # Invoke the Heroku orb
+
 # Define the jobs we want to run for this project
 jobs:
   compile:
@@ -17,20 +20,19 @@ jobs:
       - run: source venv/bin/activate
      # - run: pip install -r requirements.txt #installtherequirementsfortheprojectitself.
 
-  deploy:
-    docker:
-      - image: jdillarstone/my_image
-        auth:
-          username: jdillarstone
-          password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
-    steps:
-      - run: apt-get install -y ruby-dev
-      - run: echo 'export GEM_HOME=~/.ruby/' >> ~/.bashrc
-      - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
-      - run: source ~/.bashrc
-      - run: gem install dpl
-      - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
-
+#  deploy:
+  #  docker:
+ #    - image: jdillarstone/my_image
+  #      auth:
+   #       username: jdillarstone
+    #      password: cfd776ed-e16f-4426-a6f6-dd8aa30054dc # access token specific to this project
+  #  steps:
+   #   - run: apt-get install -y ruby-dev
+    #  - run: echo 'export GEM_HOME=~/.ruby/' >> ~/.bashrc
+   #   - run: echo 'export PATH="$PATH:~/.ruby/bin"' >> ~/.bashrc
+  #   - run: source ~/.bashrc
+   #   - run: gem install dpl
+    #  - run: dpl --provider=heroku --app=jd121-simplewebapp-circleci --api-key=d02d53c1-6d2c-4831-a0f4-fe1429efec35
 
 #  test:
  #   docker:
@@ -46,6 +48,9 @@ workflows:
   compile_and_deploy:
     jobs:
       - compile
-      - deploy:
+      - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
           requires:
             - compile
+          filters:
+            branches:
+              only: sequential-branch-filter
